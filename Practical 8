@@ -1,0 +1,487 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int info;
+    struct node *prev;
+    struct node *next;
+};
+
+struct node *start = NULL;
+
+void traverse(void)
+{
+    struct node *temp = start;
+
+    if (start == NULL)
+    {
+        printf("\nList is empty.\n");
+        return;
+    }
+
+    printf("\nDoubly Linked List:\n");
+
+    while (temp != NULL)
+    {
+        printf("%d <-> ", temp->info);
+        temp = temp->next;
+    }
+
+    printf("NULL\n");
+}
+
+void insertAtFront(void)
+{
+    struct node *temp;
+    int data;
+
+    temp = (struct node *)malloc(sizeof(struct node));
+
+    if (temp == NULL)
+    {
+        printf("\nMemory allocation failed.\n");
+        return;
+    }
+
+    printf("\nEnter number to be inserted: ");
+    scanf("%d", &data);
+
+    temp->info = data;
+    temp->prev = NULL;
+    temp->next = start;
+
+    if (start != NULL)
+    {
+        start->prev = temp;
+    }
+
+    start = temp;
+
+    printf("Inserted %d at the beginning.\n", data);
+}
+
+void insertAtEnd(void)
+{
+    struct node *temp;
+    struct node *trav;
+    int data;
+
+    temp = (struct node *)malloc(sizeof(struct node));
+
+    if (temp == NULL)
+    {
+        printf("\nMemory allocation failed.\n");
+        return;
+    }
+
+    printf("\nEnter number to be inserted: ");
+    scanf("%d", &data);
+
+    temp->info = data;
+    temp->next = NULL;
+    temp->prev = NULL;
+
+    if (start == NULL)
+    {
+        start = temp;
+    }
+    else
+    {
+        trav = start;
+
+        while (trav->next != NULL)
+        {
+            trav = trav->next;
+        }
+
+        trav->next = temp;
+        temp->prev = trav;
+    }
+
+    printf("Inserted %d at the end.\n", data);
+}
+
+void insertAtPosition(void)
+{
+    struct node *temp;
+    struct node *newnode;
+    int data, pos, i;
+
+    printf("\nEnter position: ");
+    scanf("%d", &pos);
+
+    if (pos < 1)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    if (pos == 1)
+    {
+        insertAtFront();
+        return;
+    }
+
+    temp = start;
+
+    for (i = 1; i < pos - 1 && temp != NULL; i++)
+    {
+        temp = temp->next;
+    }
+
+    if (temp == NULL)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    newnode = (struct node *)malloc(sizeof(struct node));
+
+    if (newnode == NULL)
+    {
+        printf("\nMemory allocation failed.\n");
+        return;
+    }
+
+    printf("Enter number to be inserted: ");
+    scanf("%d", &data);
+
+    newnode->info = data;
+    newnode->prev = temp;
+    newnode->next = temp->next;
+
+    if (temp->next != NULL)
+    {
+        temp->next->prev = newnode;
+    }
+
+    temp->next = newnode;
+
+    printf("Inserted %d at position %d.\n", data, pos);
+}
+
+void deleteFirst(void)
+{
+    struct node *temp;
+
+    if (start == NULL)
+    {
+        printf("\nList is empty.\n");
+        return;
+    }
+
+    temp = start;
+    start = start->next;
+
+    if (start != NULL)
+    {
+        start->prev = NULL;
+    }
+
+    printf("Deleted element: %d\n", temp->info);
+    free(temp);
+}
+
+void deleteEnd(void)
+{
+    struct node *temp;
+
+    if (start == NULL)
+    {
+        printf("\nList is empty.\n");
+        return;
+    }
+
+    temp = start;
+
+    if (temp->next == NULL)
+    {
+        printf("Deleted element: %d\n", temp->info);
+        start = NULL;
+        free(temp);
+        return;
+    }
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    temp->prev->next = NULL;
+
+    printf("Deleted element: %d\n", temp->info);
+    free(temp);
+}
+
+void deletePosition(void)
+{
+    struct node *temp;
+    int pos, i;
+
+    if (start == NULL)
+    {
+        printf("\nList is empty.\n");
+        return;
+    }
+
+    printf("\nEnter position to delete: ");
+    scanf("%d", &pos);
+
+    if (pos < 1)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    if (pos == 1)
+    {
+        deleteFirst();
+        return;
+    }
+
+    temp = start;
+
+    for (i = 1; i < pos && temp != NULL; i++)
+    {
+        temp = temp->next;
+    }
+
+    if (temp == NULL)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    if (temp->next != NULL)
+    {
+        temp->next->prev = temp->prev;
+    }
+
+    temp->prev->next = temp->next;
+
+    printf("Deleted element: %d\n", temp->info);
+    free(temp);
+}
+
+void freeList(void)
+{
+    struct node *temp;
+
+    while (start != NULL)
+    {
+        temp = start;
+        start = start->next;
+        free(temp);
+    }
+}
+
+int main(void)
+{
+    int choice;
+
+    while (1)
+    {
+        printf("\n--- DOUBLY LINKED LIST ---\n");
+        printf("1. Display List\n");
+        printf("2. Insertion at Beginning\n");
+        printf("3. Insertion at End\n");
+        printf("4. Insertion at Specified Position\n");
+        printf("5. Deletion from Beginning\n");
+        printf("6. Deletion from End\n");
+        printf("7. Deletion from Specified Position\n");
+        printf("8. Exit\n");
+
+        printf("\nEnter Choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                traverse();
+                break;
+
+            case 2:
+                insertAtFront();
+                break;
+
+            case 3:
+                insertAtEnd();
+                break;
+
+            case 4:
+                insertAtPosition();
+                break;
+
+            case 5:
+                deleteFirst();
+                break;
+
+            case 6:
+                deleteEnd();
+                break;
+
+            case 7:
+                deletePosition();
+                break;
+
+            case 8:
+                freeList();
+                printf("Program exited.\n");
+                return 0;
+
+            default:
+                printf("Incorrect choice. Try again.\n");
+        }
+    }
+}
+
+
+
+
+// Output //
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 2
+
+Enter number to be inserted: 10
+Inserted 10 at the beginning.
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 3
+
+Enter number to be inserted: 20
+Inserted 20 at the end.
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 3
+
+Enter number to be inserted: 30
+Inserted 30 at the end.
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 4
+
+Enter position: 2
+Enter number to be inserted: 15
+Inserted 15 at position 2.
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 1
+
+Doubly Linked List:
+10 <-> 15 <-> 20 <-> 30 <-> NULL
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 5
+Deleted element: 10
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 6
+Deleted element: 30
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 7
+
+Enter position to delete: 2
+Deleted element: 20
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 1
+
+Doubly Linked List:
+15 <-> NULL
+
+--- DOUBLY LINKED LIST ---
+1. Display List
+2. Insertion at Beginning
+3. Insertion at End
+4. Insertion at Specified Position
+5. Deletion from Beginning
+6. Deletion from End
+7. Deletion from Specified Position
+8. Exit
+
+Enter Choice: 8
+Program exited.
