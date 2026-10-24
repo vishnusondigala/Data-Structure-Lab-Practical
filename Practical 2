@@ -1,0 +1,217 @@
+#include <stdio.h>
+#define SIZE 5
+
+int top = -1;
+int inp_array[SIZE];
+
+void push(void);
+void pop(void);
+void change(void);
+void peep(void);
+void display(void);
+
+int main(void)
+{
+    int ch;
+
+    while (1)
+    {
+        printf("\n\n--- STACK OPERATIONS ---\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Change\n");
+        printf("4. Peep\n");
+        printf("5. Display\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch)
+        {
+            case 1:
+                push();
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                change();
+                break;
+
+            case 4:
+                peep();
+                break;
+
+            case 5:
+                display();
+                break;
+
+            case 0:
+                printf("Program exited.\n");
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
+
+void push(void)
+{
+    int data;
+
+    if (top == SIZE - 1)
+    {
+        printf("Stack Overflow!\n");
+    }
+    else
+    {
+        printf("Enter the data: ");
+        scanf("%d", &data);
+
+        top++;
+        inp_array[top] = data;
+
+        printf("Inserted value = %d\n", inp_array[top]);
+    }
+}
+
+void pop(void)
+{
+    if (top == -1)
+    {
+        printf("Stack Underflow!\n");
+    }
+    else
+    {
+        printf("Deleted value = %d\n", inp_array[top]);
+        top--;
+    }
+}
+
+void change(void)
+{
+    int position, value;
+
+    if (top == -1)
+    {
+        printf("Stack is empty!\n");
+        return;
+    }
+
+    printf("Enter position from top (1 = top): ");
+    scanf("%d", &position);
+
+    if (position < 1 || position > top + 1)
+    {
+        printf("Invalid position!\n");
+    }
+    else
+    {
+        printf("Enter new value: ");
+        scanf("%d", &value);
+
+        inp_array[top - position + 1] = value;
+
+        printf("Value changed successfully.\n");
+    }
+}
+
+void peep(void)
+{
+    if (top == -1)
+    {
+        printf("Stack is empty!\n");
+    }
+    else
+    {
+        printf("Index of top element = %d\n", top);
+        printf("Value at top element = %d\n", inp_array[top]);
+    }
+}
+
+void display(void)
+{
+    int i;
+
+    if (top == -1)
+    {
+        printf("Stack is empty!\n");
+    }
+    else
+    {
+        printf("Stack elements (top to bottom):\n");
+
+        for (i = top; i >= 0; i--)
+        {
+            printf("%d\n", inp_array[i]);
+        }
+    }
+}
+
+
+
+// Output //
+Enter no of elements: 5
+Enter array elements:
+10
+20
+30
+40
+50
+
+--- Array Operations ---
+1. Traversal
+2. Insertion
+3. Deletion
+4. Searching
+5. Exit
+Enter your choice: 1
+Array Elements are:
+10 20 30 40 50
+
+--- Array Operations ---
+1. Traversal
+2. Insertion
+3. Deletion
+4. Searching
+5. Exit
+Enter your choice: 2
+Enter position: 3
+Enter element to insert: 25
+Array after insertion:
+10 20 25 30 40 50
+
+--- Array Operations ---
+1. Traversal
+2. Insertion
+3. Deletion
+4. Searching
+5. Exit
+Enter your choice: 3
+Enter position to delete (1 to 6): 4
+Array after deletion:
+10 20 25 40 50
+
+--- Array Operations ---
+1. Traversal
+2. Insertion
+3. Deletion
+4. Searching
+5. Exit
+Enter your choice: 4
+Enter element to search: 40
+Element found at position 4
+
+--- Array Operations ---
+1. Traversal
+2. Insertion
+3. Deletion
+4. Searching
+5. Exit
+Enter your choice: 5
+Program Ended.
